@@ -6,7 +6,7 @@ Juego de battleship
 
 Download the proyect using git
 ```
-$ git clone https://github.com/4GeeksAcademy/react-hello.git
+$ git clone [https://github.com/4GeeksAcademy/react-hello.git](https://github.com/Mirkopantufla/battle_ship_react.git)
 $ cd battle_ship_react
 ```
 
