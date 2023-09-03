@@ -241,7 +241,7 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
                     </li>
                 </ul>
             </div>
-            {/* Div */}
+            {/* Nombres disponibles una vez iniciado el juego */}
             <div className={`text-center ${store.gameSteps === 2 ? "" : "d-none"}`}>
                 <h1>{player === 1 ? "Player1" : "Ia"}</h1>
             </div>

@@ -36,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ selectedShip: ship });
             },
             setPersonalTable: (table) => {
-                setStore({ personalTable: table })
+                setStore({ personalTable: [...table] })
             },
             //Generador de tabla automatico y aleatorio
             setIaTable: () => {
@@ -65,6 +65,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log(randomBoolean ? "true" : "false")
                 })
 
+                // setStore({ iaTable: copyMatrix })
             }
         }
     }
