@@ -61,8 +61,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                         posiblePositionColumn = (Math.floor(Math.random() * 10) + 1)
                     }
 
-                    console.log(ship.name, " x:", String.fromCharCode(64 + posiblePositionRow), " y:", posiblePositionColumn)
-                    console.log(randomBoolean ? "true" : "false")
+                    // console.log(ship.name, " x:", String.fromCharCode(64 + posiblePositionRow), " y:", posiblePositionColumn)
+                    // console.log(randomBoolean ? "true" : "false")
                 })
 
                 // setStore({ iaTable: copyMatrix })
