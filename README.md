@@ -1,16 +1,25 @@
 # battle_ship_react
-Juego de battleship 
+Juego de battleship
+Proyecto hecho con React, JavaScript, HMTL y CSS
+Proyecto empezado con 
+
+- npm create vite
+
+## Librerias utilizadas
+
+- react-icons: https://react-icons.github.io/react-icons/
+- bootstrap
 
 
-## Local Installation (skip if you are working on codespaces or gitpod)
+## Instalación Local
 
-Download the proyect using git
+Descarga el proyecto usando git
 ```
 $ git clone https://github.com/Mirkopantufla/battle_ship_react.git
 $ cd battle_ship_react
 ```
 
-## How to start proyect?
+## Como empiezo el proyecto?
 
-- Install the packages with `$ npm install`.
-- Run vite with `$ npm run dev`
+- Instala los paquetes con `$ npm install`.
+- Corre la aplicación con `$ npm run dev`
