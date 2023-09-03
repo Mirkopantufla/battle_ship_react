@@ -9,8 +9,7 @@ Bienvenido al juego, a continuación algunas reglas e indicaciones:
 - El barco NO PUEDE salir del tablero ni tampoco pasar por encima de otros barcos, de cometer algun error el sistema no posicionara el barco seleccionado.
 - Para girar la orientacion del barco, debes hacerle doble click encima del barco.
 - Una vez pocicionados todos los barcos, puedes empezar el juego con el boton que aparecera si cumples las condiciones.
-- Al empezar el juego, se generara un tablero con barcos posicionados aleatoriamente, al cual debes hundir sus barcos
-- Si quieres volver a posicionar tus barcos, has click <a href=".">AQUÍ</a> (recargará la pagina)
+- Al empezar el juego, se generara un tablero con barcos posicionados aleatoriamente, al cual debes hundir sus barcos.
 
                   
 Proyecto empezado con 
