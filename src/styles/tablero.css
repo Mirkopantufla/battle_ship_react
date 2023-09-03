@@ -1,0 +1,75 @@
+.customSlots {
+    width: 45px;
+    height: 45px;
+}
+
+.customSlots.mini {
+    width: 20px;
+    height: 20px;
+}
+
+.customShip {
+    min-width: 120px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.activeShip {
+    /* border: 20px solid black; */
+    border: 2px solid black;
+    transform: scale(1.1)
+}
+
+.customShip.needSelected {
+    background-color: rgba(129, 0, 0, 0.258);
+}
+
+.customShip.selected {
+    background-color: rgba(6, 129, 0, 0.258);
+}
+
+/* Responsive de barcos  */
+@media (min-width: 860px) {
+    .customShip {
+        min-width: 120px;
+    }
+}
+
+@media (min-width: 541px) {
+    .customSlots {
+        width: 45px;
+        height: 45px;
+        font-size: 30px;
+    }
+
+    .customSlots.mini {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 540px) {
+    .customSlots {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+
+    .customSlots.mini {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+@media (max-width: 356px) {
+    .customSlots {
+        width: 25px;
+        height: 25px;
+        font-size: 15px;
+    }
+
+    .customSlots.mini {
+        width: 10px;
+        height: 10px;
+    }
+}
