@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Context } from '../context/appContext'
 import Ships from './Ships'
 import '../styles/tablero.css'
+import Square from './Square'
 
 const Tablero = ({ chosenPositionsMatrix, player }) => {
 
@@ -17,9 +18,9 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
 
     const [ships, setShips] = useState(initialShips);
 
-    const [table, setTable] = useState(chosenPositionsMatrix);
+    const [table, setTable] = useState(JSON.parse(JSON.stringify(chosenPositionsMatrix)));
 
-    const [occuppedSlots, setOcuppedSlots] = useState([]);
+    const [showMyShips, setShowMyShips] = useState(false);
 
     useEffect(() => {
 
@@ -27,26 +28,20 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
             checkAllSelected()
         }
 
+        if (checkWinner() === true) {
+            actions.setSteps(store.gameSteps + 1)
+            player === 1 ? actions.setWinner("CPU") : actions.setWinner("Player 1")
+        }
+
     }, [table])
 
+    useEffect(() => {
 
-    const changeColor = (number) => {
-        switch (number) {
-            case 1:
-                return 'bg-light';
-            case 2:
-                if (store?.gameSteps <= 1) {
-                    return 'bg-warning'
-                }
-                return 'bg-primary';
-            case 3:
-                return 'bg-danger';
-            case 4:
-                return 'bg-secondary';
-            default:
-                return 'bg-primary';
+        if (store.gameSteps > 1 && player === 1) {
+            setTable(store.personalTable)
         }
-    }
+
+    }, [store.personalTable])
 
     //Estados de la matrix:
     //0 = Vacío (No ha habido interacción)
@@ -62,11 +57,29 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
             ship.setted == true ? counter++ : null
         })
 
-        if (counter == 5) {
+        if (counter == 5 && store.gameSteps < 2) {
             console.log("readyToStart")
-            actions.setPersonalTable([...table])
-
+            actions.setPersonalTable(JSON.parse(JSON.stringify(table)))
+            actions.setIaTable()
             actions.setSteps()
+        }
+    }
+
+    const checkWinner = () => {
+
+        let contador = 0;
+        for (let row = 1; row < table.length; row++) {
+            for (let col = 1; col < table[row].length; col++) {
+
+                table[row][col] === 3 ? contador++ : null
+
+            }
+        }
+
+        if (contador === 17) {
+            return true
+        } else {
+            return false
         }
     }
 
@@ -79,7 +92,7 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
         //Me indica el id del barco seleccionado, el cual me indica a la vez la posicion dentro del array de barcos base.
         let position = store.selectedShip.id
 
-        if (checkValidPosition(selectedShip.direction, selectedShip.slots, row, column)) {
+        if (actions.checkValidPosition(selectedShip.direction, selectedShip.slots, row, column)) {
             return console.log('Hay un problema')
         }
 
@@ -91,7 +104,7 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
                 tableCopy[row + i][column] = 2
             }
 
-            setTable(tableCopy)
+            setTable(JSON.parse(JSON.stringify(tableCopy)))
             shipsCopy[position].positionX = row
             shipsCopy[position].positionY = column
             shipsCopy[position].setted = true
@@ -104,7 +117,7 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
             for (let i = 0; i < selectedShip.slots; i++) {
                 tableCopy[row][column + i] = 2
             }
-            setTable(tableCopy)
+            setTable(JSON.parse(JSON.stringify(tableCopy)))
 
             shipsCopy[position].positionX = row
             shipsCopy[position].positionY = column
@@ -119,100 +132,56 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
     }
 
     const updateValue = (row, column) => {
-        const tableCopy = [...table]
 
-        store?.gameSteps <= 1 ? setGameBoard(row, column, tableCopy) : null
+        // let tableCopy = JSON.parse(JSON.stringify(table))
+        // if (store.gameSteps > 1) {
+        //     tableCopy = JSON.parse(JSON.stringify(store.iaTable))
+        // }
+
+        const tableCopy = JSON.parse(JSON.stringify(table))
+
+        //Si los valores del espacio a actualizar son 1, 3 o 4, que retorne
+        if (tableCopy[row][column] == 1 || tableCopy[row][column] == 3 || tableCopy[row][column] == 4) {
+            return
+        }
+
+        if (store.gameSteps > 1 && store.shifter === false || store.gameSteps > 1 && player === 1) {
+            return
+        }
+
+        // actions.setShifter()
+
+        //Si el paso del juego es menor o igual a 1, se pueden posicionar piezas dentro del tablero
+        //Asi se evita activaciones posteriores al paso 1 y reutilizar la misma funcion que es llamada por cada cuadrado del tablero.
+        store.gameSteps <= 1 ? setGameBoard(row, column, tableCopy) : null
 
 
+        //Los valores podran ser actualizados SOLO en el paso 2
+        if (store.gameSteps === 2) {
+            //Se activa la funcion para el cambio de turno una vez iniciado el juego
+            actions.setShifter()
 
-
-        if (store?.gameSteps > 1) {
-            if (tableCopy[row][column] == 4 || tableCopy[row][column] == 3) {
-
-            } else if (tableCopy[row][column] == 2) {
+            if (tableCopy[row][column] == 2) {
                 tableCopy[row][column] = 3
-                setTable(tableCopy)
+                setTable(JSON.parse(JSON.stringify(tableCopy)))
+                actions.updateIaTable(tableCopy)
             } else if (tableCopy[row][column] == 0) {
                 tableCopy[row][column] = 1
-                setTable(tableCopy)
+                setTable(JSON.parse(JSON.stringify(tableCopy)))
+                actions.updateIaTable(tableCopy)
             } else {
 
             }
         }
 
-
     }
 
-    //Funcion que recibe la Dirección del barco (hacia abajo true, hacia la derecha false) y si no ha sido seteado
-    const checkValidPosition = (direction, selectedShipSlots, row, column) => {
 
-        let auxArray = []
-        let hasError = false
-        let errorMsg = ""
-
-        console.log(selectedShipSlots, " ", row, ' ', column, direction ? "abajo" : "derecha")
-        if (row == 0 || column == 0) {
-            hasError = true;
-            errorMsg = "Posicion fuera del tabero"
-        } else if (selectedShipSlots == 5 && direction === true && row > 6 || selectedShipSlots == 5 && direction === false && column > 6) {
-            hasError = true;
-            errorMsg = "Posicion fuera del tabero"
-        } else if (selectedShipSlots == 4 && direction === true && row > 7 || selectedShipSlots == 4 && direction === false && column > 7) {
-            hasError = true;
-            errorMsg = "Posicion fuera del tabero"
-        } else if (selectedShipSlots == 3 && direction === true && row > 8 || selectedShipSlots == 3 && direction === false && column > 8) {
-            hasError = true;
-            errorMsg = "Posicion fuera del tabero"
-        } else if (selectedShipSlots == 2 && direction === true && row > 9 || selectedShipSlots == 2 && direction === false && column > 9) {
-            hasError = true;
-            errorMsg = "Posicion fuera del tabero"
-        }
-
-        if (direction == true && store.selectedShip != {}) {
-            for (let i = 0; i < selectedShipSlots; i++) {
-                auxArray.push(String.fromCharCode(64 + row + i) + column)
-            }
-        } else {
-            for (let i = 0; i < selectedShipSlots; i++) {
-                auxArray.push(String.fromCharCode(64 + row) + (column + i))
-            }
-        }
-
-        auxArray.forEach(element => {
-
-            if (occuppedSlots.includes(element)) {
-                errorMsg = "Los barcos colicionan"
-                hasError = true
-            }
-
-        });
-
-        if (hasError) {
-            console.log(errorMsg)
-            return hasError;
-        } else {
-            setOcuppedSlots(occuppedSlots.concat(auxArray))
-        }
-
-    }
-
-    //Funcion que setea los numeros exteriores
-    const setIndex = (number, indexRow, indexCol) => {
-
-        if (number === 4 && indexRow == 0) {
-            return indexCol;
-        } else if (number === 4 && indexCol == 0) {
-            //Desde el caracter 65 empiezan las letras en mayusculas
-            return String.fromCharCode(64 + indexRow);
-        }
-
-        return null
-    }
 
     return (
 
-        <div className='offset-md-2 col-md-8 border border-dark py-4'>
-            <div className={`d-flex flex-column justify-content-center align-items-center ${store.gameSteps === 2 ? "d-none" : ""}`}>
+        <div className={`${store.gameSteps < 2 ? "offset-2 col-8 py-4" : "col-md-6 py-6"}`}>
+            <div className={`d-flex flex-column justify-content-center align-items-center ${store.gameSteps >= 2 ? "d-none" : ""}`}>
                 <h1>BattleShip</h1>
                 <h4>Bienvenido al juego, a continuación algunas reglas e indicaciones:</h4>
                 <ul>
@@ -242,14 +211,14 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
                 </ul>
             </div>
             {/* Nombres disponibles una vez iniciado el juego */}
-            <div className={`text-center ${store.gameSteps === 2 ? "" : "d-none"}`}>
-                <h1>{player === 1 ? "Player1" : "Ia"}</h1>
+            <div className={`text-center ${store.gameSteps >= 2 ? "" : "d-none"}`}>
+                <h1>{player === 1 ? "My table" : "Enemy table"}</h1>
             </div>
-            <div className={`d-flex flex-wrap justify-content-evenly mb-2 ${store?.gameSteps <= 1 ? "" : "d-none"}`} >
+            <div className={`d-flex flex-wrap justify-content-evenly my-4 ${store?.gameSteps <= 1 ? "" : "d-none"}`} >
                 {
                     ships.map((ship, index) =>
                         <span
-                            onClick={(e) => actions.setSelectedShip(ship)}
+                            onClick={() => actions.setSelectedShip(ship)}
                             key={`ship${index}`}
                         >
                             <Ships id={index} ship={ship} />
@@ -273,34 +242,52 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
                 }
             </div>
             {/* Generador de la tabla, dependiendo de la tabla, esta dibujara en esta seccion con todas sus caracteristicas */}
-            {
-                table?.map((row, indexRow) =>
-                    <div
-                        id={`row${indexRow}`}
-                        key={`row${indexRow}`}
-                        className='d-flex justify-content-center'
-                    >
-                        {
-                            row?.map((column, indexCol) =>
-                                <div
-                                    id={`${String.fromCharCode(64 + indexRow)}${indexCol}`}
-                                    key={`${indexRow}${indexCol}`}
-                                    className={`border border-dark customSlots ${changeColor(column)}`}
-                                    onClick={() => updateValue(indexRow, indexCol)}
-                                >
-                                    <span className='d-flex justify-content-center'>
-                                        {
-                                            setIndex(column, indexRow, indexCol)
-                                        }
-                                    </span>
-                                </div>
-                            )
-                        }
-                    </div>
-                )
-            }
+            <div>
+                {
+                    table?.map((row, indexRow) =>
+                        <div
+                            id={`row${indexRow}`}
+                            key={`row${indexRow}`}
+                            className='d-flex justify-content-center'
+                        >
+                            {
+                                row?.map((column, indexCol) =>
+
+                                    <Square
+                                        key={`${indexRow}${indexCol}`}
+                                        value={column}
+                                        onClick={() => updateValue(indexRow, indexCol)}
+                                        indexCol={indexCol}
+                                        indexRow={indexRow}
+                                        showMyShips={showMyShips}
+                                    />
+                                    // <div
+                                    //     id={`${String.fromCharCode(64 + indexRow)}${indexCol}`}
+                                    //     key={`${indexRow}${indexCol}`}
+                                    //     className={`border border-dark customSlots ${changeColor(column)}`}
+                                    //     onClick={() => updateValue(indexRow, indexCol)}
+                                    // >
+                                    //     <span className='d-flex justify-content-center'>
+                                    //         {
+                                    //             setIndex(column, indexRow, indexCol)
+                                    //         }
+                                    //     </span>
+                                    // </div>
+                                )
+                            }
+                        </div>
+                    )
+                }
+            </div>
             {/* Boton para comprobar si se estan generando bien las coordenadas aleatorias */}
-            {/* <button onClick={() => actions.setIaTable()} className='btn btn-primary'>Aprietame</button> */}
+            {
+                player === 1 && store.gameSteps > 1 ?
+                    <div className='text-center mt-2'>
+                        <button onClick={() => setShowMyShips(!showMyShips)} className='btn btn-primary'>Mostrar mis barcos</button>
+                    </div>
+                    : null
+            }
+            {/* <button className='btn btn-primary' onClick={() => actions.checkPosibleFireDirection()}>APRIETAMEEEEEEEE</button> */}
         </div>
     )
 }
