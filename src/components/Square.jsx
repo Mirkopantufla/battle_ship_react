@@ -5,6 +5,7 @@ const Square = ({ value, onClick, indexRow, indexCol, showMyShips }) => {
 
     const { store } = useContext(Context);
 
+    //Cambiara el color dependiendo del valor del slot
     const changeColor = (number) => {
         switch (number) {
             case 1:
@@ -23,8 +24,6 @@ const Square = ({ value, onClick, indexRow, indexCol, showMyShips }) => {
         }
     }
 
-    let className = `border border-dark customSlots ${changeColor(value)}`;
-
     //Funcion que setea los numeros exteriores
     const setIndex = (number, indexRow, indexCol) => {
 
@@ -40,7 +39,7 @@ const Square = ({ value, onClick, indexRow, indexCol, showMyShips }) => {
     }
 
     return (
-        <div className={className} onClick={onClick}>
+        <div className={`border border-dark customSlots ${changeColor(value)}`} onClick={onClick}>
             <span className='d-flex justify-content-center'>
                 {
                     setIndex(value, indexRow, indexCol)

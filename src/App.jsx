@@ -40,6 +40,9 @@ function App() {
                       Debes atacar el tablero enemigo.
                     </li>
                     <li>
+                      El inicio del juego sera para un jugador aleatorio
+                    </li>
+                    <li>
                       Una vez marcado un slot del tablero enemigo, la CPU empezara a calcular su siguiente movimiento para atacar tu tablero.
                     </li>
                     <li>

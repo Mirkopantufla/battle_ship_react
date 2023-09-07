@@ -57,6 +57,7 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
             ship.setted == true ? counter++ : null
         })
 
+        //Chequeara si estan todos los barcos seleccionados solo si el paso es 2 o menos
         if (counter == 5 && store.gameSteps < 2) {
             console.log("readyToStart")
             actions.setPersonalTable(JSON.parse(JSON.stringify(table)))
@@ -133,11 +134,6 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
 
     const updateValue = (row, column) => {
 
-        // let tableCopy = JSON.parse(JSON.stringify(table))
-        // if (store.gameSteps > 1) {
-        //     tableCopy = JSON.parse(JSON.stringify(store.iaTable))
-        // }
-
         const tableCopy = JSON.parse(JSON.stringify(table))
 
         //Si los valores del espacio a actualizar son 1, 3 o 4, que retorne
@@ -148,8 +144,6 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
         if (store.gameSteps > 1 && store.shifter === false || store.gameSteps > 1 && player === 1) {
             return
         }
-
-        // actions.setShifter()
 
         //Si el paso del juego es menor o igual a 1, se pueden posicionar piezas dentro del tablero
         //Asi se evita activaciones posteriores al paso 1 y reutilizar la misma funcion que es llamada por cada cuadrado del tablero.
@@ -175,8 +169,6 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
         }
 
     }
-
-
 
     return (
 
@@ -261,18 +253,6 @@ const Tablero = ({ chosenPositionsMatrix, player }) => {
                                         indexRow={indexRow}
                                         showMyShips={showMyShips}
                                     />
-                                    // <div
-                                    //     id={`${String.fromCharCode(64 + indexRow)}${indexCol}`}
-                                    //     key={`${indexRow}${indexCol}`}
-                                    //     className={`border border-dark customSlots ${changeColor(column)}`}
-                                    //     onClick={() => updateValue(indexRow, indexCol)}
-                                    // >
-                                    //     <span className='d-flex justify-content-center'>
-                                    //         {
-                                    //             setIndex(column, indexRow, indexCol)
-                                    //         }
-                                    //     </span>
-                                    // </div>
                                 )
                             }
                         </div>

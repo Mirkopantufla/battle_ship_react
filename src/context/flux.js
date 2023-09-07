@@ -260,12 +260,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                 let nextPosiblePosition = []
 
                 //Valores formateados en un array para mejor vista
+                //Debo atrapar el error, en caso de que busque por las posiciones x: 10 e i: 10 
+                //que no busque en una posicion inexistente, le doy valor de 0 para invalidar mas abajo.
                 //Primero el valor de la casilla, despues la posicion en X e Y
                 //0 = valor, 1 = Y, 2 = X
-                let arrayDerecha = [personalTable[actualFirePosition[0]][(parseInt(actualFirePosition[1]) + 1)], actualFirePosition[0], (actualFirePosition[1] + 1)]
-                let arrayAbajo = [personalTable[(parseInt(actualFirePosition[0]) + 1)][actualFirePosition[1]], (actualFirePosition[0] + 1), actualFirePosition[1]]
-                let arrayIzquierda = [personalTable[actualFirePosition[0]][(parseInt(actualFirePosition[1]) - 1)], actualFirePosition[0], (actualFirePosition[1] - 1)]
-                let arrayArriba = [personalTable[(parseInt(actualFirePosition[0]) - 1)][actualFirePosition[1]], (actualFirePosition[0] - 1), actualFirePosition[1]]
+
+                let arrayDerecha = [
+                    personalTable[actualFirePosition[0]][(parseInt(actualFirePosition[1]) + 1) == 11 ? 0 : (parseInt(actualFirePosition[1]) + 1)],
+                    actualFirePosition[0],
+                    (actualFirePosition[1] + 1) == 11 ? 0 : (actualFirePosition[1] + 1)
+                ]
+                let arrayAbajo = [
+                    personalTable[(parseInt(actualFirePosition[0]) + 1) == 11 ? 0 : (parseInt(actualFirePosition[0]) + 1)][actualFirePosition[1]],
+                    (actualFirePosition[0] + 1) == 11 ? 0 : (parseInt(actualFirePosition[0]) + 1),
+                    actualFirePosition[1]
+                ]
+                let arrayIzquierda = [
+                    personalTable[actualFirePosition[0]][(parseInt(actualFirePosition[1]) - 1)],
+                    actualFirePosition[0],
+                    (actualFirePosition[1] - 1)
+                ]
+                let arrayArriba = [
+                    personalTable[(parseInt(actualFirePosition[0]) - 1)][actualFirePosition[1]],
+                    (actualFirePosition[0] - 1),
+                    actualFirePosition[1]
+                ]
 
                 // //Este muestra la posicion de derecha
                 // console.log(`Valor Derecha:   ${arrayDerecha[0]} Row: ${arrayDerecha[1]} Column: ${arrayDerecha[2]}`)
