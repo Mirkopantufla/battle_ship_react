@@ -11,6 +11,7 @@ Bienvenido al juego, a continuación algunas reglas e indicaciones:
 - Una vez pocicionados todos los barcos, puedes empezar el juego con el boton que aparecera si cumples las condiciones.
 - Al empezar el juego, se generara un tablero para la CPU con barcos posicionados aleatoriamente, al cual debes hundir sus barcos.
 
+## Iniciado el juego:
 - Debes atacar el tablero enemigo.
 - Una vez marcado un slot del tablero enemigo, la CPU empezara a calcular su siguiente movimiento para atacar tu tablero.
 - La CPU disparara aleatoriamente, dependiendo si encuentra una parte de un barco en la posicion marcada, buscara en los slots adyacentes
