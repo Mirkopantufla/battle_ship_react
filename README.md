@@ -11,6 +11,7 @@ Juego de battleship
 
 ### Iniciado el juego:
 - Debes atacar el tablero enemigo.
+- El inicio del juego sera para un jugador aleatorio
 - Una vez marcado un slot del tablero enemigo, la CPU empezara a calcular su siguiente movimiento para atacar tu tablero.
 - La CPU disparara aleatoriamente, dependiendo si encuentra una parte de un barco en la posicion marcada, buscara en los slots adyacentes
 - Una vez encontrados todos los barcos en cualquiera de los dos tableros, se mostrara el ganador!
