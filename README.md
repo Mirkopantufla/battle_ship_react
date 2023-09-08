@@ -1,5 +1,7 @@
 # battle_ship_react
 Juego de battleship
+<br>
+https://battle-ship-react.vercel.app/
 
 ### Bienvenido al juego, a continuación algunas reglas e indicaciones:
 - Debes posicionar tus barcos al principio del juego haciendo Click encima de sus respectivos recuadros (barcos)
